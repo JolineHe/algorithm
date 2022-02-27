@@ -1,0 +1,65 @@
+//题1:加1
+
+class Solution {
+    public int[] plusOne(int[] digits) {
+        int k = digits.length-1;     //+1首先考虑发生在数组最后一个元素上
+        while(k>=0){                 
+            if(digits[k]+1<10){
+                digits[k]++;
+                return digits;        //如果+1没有进位，则在该位+1，返回数组
+            }else{
+                digits[k]=0;          //如果+1发生进位了，则该位为0
+                k--;                  //下一轮处理下标小1的元素
+            }
+        }
+        //如果while里没有发生return，则说明每个元素都发生了进位
+        //那么应该开辟一个新的数组，比digits多一位，首位为1，其余都是0
+        //999+1=1000
+        int[] res = new int[digits.length+1];
+        res[0]=1;
+        for(int i=1;i<res.length-1;i++){
+            res[i]=0;
+        }
+        return res;
+    }
+}
+
+
+
+//题2: 合并两个有序链表
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+
+//解题思路：
+//新链表的头节点是哪条链表的头节点，这一点很好确定
+//有了新链表的头节点后，问题落在怎么确定它的next？注意此时list1‘和list2的合并链表的头节点同样好确定。
+//使用递归求出每次合并链表的头节点
+        
+class Solution {
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        if(list1 == null){
+            return list2;
+        }
+        if(list2 == null){
+            return list1;
+        }
+
+        if(list1.val <= list2.val){                             
+            list1.next = mergeTwoLists(list1.next,list2);   
+            return list1;   
+        }else{
+            list2.next = mergeTwoLists(list2.next, list1);
+            return list2;
+        }
+    }
+}
+```
