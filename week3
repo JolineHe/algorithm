@@ -1,0 +1,68 @@
+//47. 全排列 II
+
+class Solution {
+    List<Integer> candidat = new ArrayList<>();
+    HashSet<List<Integer>> answers = new HashSet<List<Integer>>();    //HashSet，保证answers里无重复的元素
+    boolean[] done;
+
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        done = new boolean[nums.length];
+        dfs(0,nums);                                         //此时candidat.size()=0
+        return new ArrayList<List<Integer>>(answers);        //因为按题目要求返回List<List<Integer>>
+    }
+
+    public void dfs(int k, int[]nums){
+        if(k == nums.length){
+            answers.add(new ArrayList<Integer>(candidat));
+            return;
+        }
+
+        for(int i=0;i<nums.length;i++){             //
+            if(!done[i]){
+                candidat.add(nums[i]);
+                done[i] = true;
+                dfs(k+1,nums);
+                candidat.remove(k);
+                done[i]=false;
+            }
+        }
+    }
+}
+
+
+//106 从中序与后序遍历序列构造二叉树
+//解题思路：
+//子树的遍历数组是树的遍历数组的子数组
+//从后序遍历数组容易得到根节点，然后在中序遍历数组找到根节点，以及左右子树的子数组
+//根据在中序遍历数组找到的左右子树子数组的信息，找到左右子树在后序遍历数组中的子数组
+//遍历子数组的中序和后序数组
+//递归的停止条件？
+class Solution {
+    HashMap<Integer, Integer> map = new HashMap();
+    int[] post;
+
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        for(int i = 0; i < inorder.length; i++){
+            map.put(inorder[i], i);
+        }
+        post = postorder;
+        TreeNode root = findRoot(0,inorder.length-1, 0, postorder.length-1);
+        return root;
+    }
+
+
+    TreeNode findRoot(int inorderStartIndex, int inorderEndIndex, int postorderStartIndex, int postorderEndIndex){    
+        if(inorderStartIndex > inorderEndIndex || postorderStartIndex > postorderEndIndex){
+            return null;
+        }
+        int rootValue = post[postorderEndIndex];
+        int rootInorderIndex = map.get(rootValue);
+
+        TreeNode root = new TreeNode(rootValue);
+        TreeNode left = findRoot(inorderStartIndex,rootInorderIndex-1,postorderStartIndex,postorderStartIndex+(rootInorderIndex-1-inorderStartIndex));   
+        TreeNode right = findRoot(rootInorderIndex+1,inorderEndIndex,postorderStartIndex+rootInorderIndex-inorderStartIndex,postorderEndIndex-1);
+        root.left = left;
+        root.right = right;
+        return root;
+    }
+}
