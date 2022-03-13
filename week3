@@ -98,9 +98,6 @@ class Solution {
                 q.add(i);
             }
         }
-        if(q.size()==0){
-            return new int[0];
-        }
         int[] courses = new int[numCourses];
         int num = 0;
         while(q.size()>0){
