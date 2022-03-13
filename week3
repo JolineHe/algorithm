@@ -66,3 +66,58 @@ class Solution {
         return root;
     }
 }
+
+
+
+/* 210. 课程表 II
+解题思路：
+构造邻接表和入边度数组；
+广度优先遍历图，用一个队列进行遍历操作，入队表示排队等候遍历的节点，出队表示被遍历了；
+从遍历入边度数组入手，度为0的节点进入队列；
+队列操作：只要队列还不为空，队头做出队操作，同时修改以队头为入边的点的度数，如果为0，也入队；
+如果无法修完所有的课程，返回一个空数组，有两种情况：1没有入度为0的课程， 2队列为空时还没修完所有课程
+*/
+
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        List<List<Integer>> linkTo = new ArrayList<List<Integer>>();
+        for(int i=0; i<numCourses; i++){
+            linkTo.add(new ArrayList<Integer>());
+        }
+        int[] inDegree = new int[numCourses];
+        Arrays.fill(inDegree,0);
+        for(int i = 0; i < prerequisites.length; i++){
+            int a = prerequisites[i][0];
+            int b = prerequisites[i][1];
+            linkTo.get(b).add(a);
+            inDegree[a]++;
+        }
+        Queue<Integer> q = new LinkedList();
+        for(int i = 0; i < inDegree.length; i++){
+            if(inDegree[i] == 0){
+                q.add(i);
+            }
+        }
+        if(q.size()==0){
+            return new int[0];
+        }
+        int[] courses = new int[numCourses];
+        int num = 0;
+        while(q.size()>0){
+            int front = q.poll();
+            courses[num] = front;
+            num++; 
+            for(int i=0; i<linkTo.get(front).size(); i++){
+                inDegree[linkTo.get(front).get(i)]--;
+                if(inDegree[linkTo.get(front).get(i)] == 0){
+                    q.add(linkTo.get(front).get(i));
+                }
+            }
+        }
+        if(num < numCourses){
+            return new int[0];
+        }else {
+            return courses; 
+        }      
+    }
+}
