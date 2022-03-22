@@ -1,0 +1,50 @@
+/*1011. 在 D 天内送达包裹的能力
+二分答案法，见代码内注释
+*/
+
+
+class Solution {
+    public int shipWithinDays(int[] weights, int days) {
+        int left = 0;
+        int right = 0;
+        for(int i=0;i<weights.length;i++){        
+            if(weights[i]>left){           //left值为单个包裹最大重量
+                left = weights[i];         //rifht值为所有包裹的重量
+            }
+            right+=weights[i];
+        }
+        //在[left,right]之间做不等式二分，寻找满足条件的的最小运载力
+        while(left<right){
+            int mid = (left+right)/2;
+            if(validate(mid,weights,days)){      //如果mid值可行，找可能更小的值
+                right = mid;
+            }else{                   //如果mid值不可行，往大的找
+                left = mid+1;
+            }
+        }
+        return right;
+    }
+
+
+    boolean validate(int load, int[] weights, int days){
+        int charge=0;
+        int cnt=0;
+        for(int i=0;i<weights.length;i++){
+            charge+=weights[i];
+            if(charge>load){
+                cnt++;
+                charge=0;
+                i--;
+            }
+            if(cnt==days && i<weights.length-1){
+                return false;
+            }
+        }
+        if(cnt<=days){        //注意此处=
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+}
