@@ -95,3 +95,33 @@ class Solution {
         }
     }
 }
+
+
+
+/* 74. 搜索二维矩阵
+解题思路：二分法
+*/
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int left=0;
+        int m=matrix.length;
+        int n=matrix[0].length;
+        int right=m*n-1;
+
+        while(left<=right){      //如果没有left=right,通不过测试数据([[1]],1)
+            int mid=(left+right+1)/2;
+            int i = mid/n;
+            int j = mid%n;
+            if(matrix[i][j]==target){
+                return true;
+            }
+
+            if(matrix[i][j]<target){
+                left=mid+1;
+            }else{
+                right=mid-1;
+            }
+        }
+        return false;
+    }
+}
