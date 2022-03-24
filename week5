@@ -48,3 +48,50 @@ class Solution {
     }
 
 }
+
+
+
+
+/*875. 爱吃香蕉的珂珂
+解题思路
+H小时吃掉香蕉的最大速度：一小时一堆，速度为max(piles[i])
+可能的最小速度为1，但是很可能在H小时内吃不完
+用二分答案，在1和max(piles[i])中找可以在H小时内吃完所有香蕉的最小速度
+*/
+
+class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        int left=1;
+        int right=0;
+        for(int i=0;i<piles.length;i++){
+            if(piles[i]>right){
+                right=piles[i];
+            }
+        }
+        while(left<right){
+            int target=(left+right)/2;
+            if(validate(piles,h,target)){
+                right=target;
+            }else{
+                left=target+1;
+            }
+        }
+        return left;
+    }
+
+    static boolean validate(int[] piles, int h, int v){
+        int cnt=0;
+        for(int i=0;i<piles.length;i++){
+            if(piles[i]%v !=0){
+                cnt+=(piles[i]/v)+1;
+            }else{
+                cnt+=piles[i]/v;
+            }
+        }
+        if(cnt<=h){
+            return true;
+        }else{
+            return false;
+        }
+    }
+}
