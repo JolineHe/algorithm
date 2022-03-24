@@ -109,7 +109,7 @@ class Solution {
         int right=m*n-1;
 
         while(left<=right){      //如果没有left=right,通不过测试数据([[1]],1)
-            int mid=(left+right+1)/2;
+            int mid=(left+right+1)/2;   //如果没有+1，则会错过target为matrix[0][1]
             int i = mid/n;
             int j = mid%n;
             if(matrix[i][j]==target){
