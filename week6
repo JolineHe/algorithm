@@ -14,3 +14,38 @@ class Solution {
         }
         return c;
     
+
+
+
+
+/**
+解题思路：遍历每层节点，计算每一层的结点的路径和
+用滚动数组w保存正在遍历的这一层一层结点的路径和，以用来更新下一层的结点的路径和
+因为w[i]值在更新w[i]和w[i+1]时用到，所以不能马上更新w[i]值，用到temp数组保存计算中w
+ */
+
+class Solution {
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int level = triangle.size();
+        int[] w = new int[level];
+        w[0]=triangle.get(0).get(0);
+        for(int i=1; i<level;i++){
+            int m = triangle.get(i).size();
+            int[] temp = new int[m];
+            temp[0] = triangle.get(i).get(0)+w[0];
+            for(int j=1;j<m;j++){
+                if(j==m-1){
+                    temp[j] = triangle.get(i).get(j)+w[j-1];
+                }else{
+                    temp[j]=Math.min(w[j-1]+triangle.get(i).get(j),w[j]+triangle.get(i).get(j));
+                }
+            }
+            w=temp;
+        }
+        int ans=10001;
+        for(int i=0;i<level;i++){
+            ans = Math.min(ans,w[i]);
+        }
+        return ans;
+    }
+}
