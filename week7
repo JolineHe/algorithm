@@ -1,0 +1,15 @@
+#不能用贪心，12=9+3=9+1+1+1
+#和为n的完全平方数的最多数量即为n，因为n=1+1+1+..+1, n个1相加
+#类似零钱兑换问题
+
+class Solution:
+    def numSquares(self, n: int) -> int:
+        dp = [0]*(n+1)
+        for i in range(1, n+1):
+            minn = n
+            j=1
+            while j*j<=i:
+                minn = min(minn, dp[i-j*j])
+                j = j+1
+            dp[i] = minn+1
+        return dp[n]
