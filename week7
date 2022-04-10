@@ -13,4 +13,19 @@ class Solution:
                 minn = min(minn, dp[i-j*j])
                 j = j+1
             dp[i] = minn+1
-        return dp[n]
+
+
+
+
+
+
+#https://leetcode-cn.com/problems/jump-game/
+class Solution:
+    def canJump(self, nums: List[int]) -> bool:
+        n, rightmost = len(nums), 0
+        for i in range(n):
+            if i <= rightmost:      #这个判断保证i本身是可达的
+                rightmost = max(rightmost, i + nums[i])
+                if rightmost >= n - 1:
+                    return True
+        return False
