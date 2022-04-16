@@ -1,0 +1,58 @@
+'''
+https://leetcode-cn.com/problems/number-of-islands/
+扫描grid，给1的网格makeSet
+再次扫描网格，unionSet，网格编号为i*n+j
+注意rank的使用，否则下面的grid会得到2的答案
+grid=[
+["1","1","1"],
+["0","1","0"],
+["1","1","1"]
+]
+'''
+class DisjointSet:
+    def __init__(self, grid):
+        m, n = len(grid), len(grid[0])
+        self.grid = grid
+        self.rank = [0] * (m * n)      #rank
+        self.fa = [-1]*(m*n)
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j]=='1':
+                    self.fa[i*n+j] = i*n+j
+
+    def find(self, x:int) -> int:
+        if self.fa[x] != x:
+            self.fa[x] = self.find(self.fa[x])
+        return self.fa[x]
+
+    def unionSet(self, x:int, y:int):
+        fax = self.find(x)
+        fay = self.find(y)
+        if fax != fay:
+            if self.rank[fax] < self.rank[fay]:
+                fax, fay = fay, fax
+            self.fa[fay] = fax
+            if self.rank[fax] == self.rank[fay]:
+                self.rank[fax] += 1
+
+    def count(self) -> int:
+        cnt = 0
+        m, n = len(self.grid), len(self.grid[0])
+        for i in range(m):
+            for j in range(n):
+                if self.grid[i][j]=='1' and self.fa[i*n+j]==i*n+j:
+                    cnt +=1
+        return cnt
+
+
+class Solution:
+    def numIslands(self,grid):
+        m, n = len(grid), len(grid[0])
+        ds = DisjointSet(grid)
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j]=='1':
+                    for x,y in [(i-1,j),(i,j-1)]:
+                        if 0<=x<m and 0<=y<n and grid[x][y]=='1':
+                            ds.unionSet(i*n+j,x*n+y)
+        return ds.count()
