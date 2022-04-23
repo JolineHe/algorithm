@@ -1,0 +1,20 @@
+'''
+709. 转换成小写字母
+'''
+class Solution:
+    def toLowerCase(self, s: str) -> str:
+        return s.lower()
+
+
+
+
+
+
+'''
+58. 最后一个单词的长度
+'''
+class Solution:
+    def lengthOfLastWord(self, s: str) -> int:
+        x = s.split()
+        return len(x[-1])
+
